@@ -21,7 +21,11 @@ public:
 	
 	virtual void Tick(float DeltaTiame)override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Moving Platform")
 	float speed = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Moving Platform", Meta = (MakeEditWidget = true))
+	FVector TargetLocation;
 	
+
 };

@@ -26,7 +26,9 @@ void AMovingPlatform::Tick(float DeltaTiame)
 	if (HasAuthority()) //Returns whether this actor has network authority 
 	{
 		FVector Location = GetActorLocation();
-		Location += FVector(speed * DeltaTiame, 0, 0);//движение по оси х 5 см в секунду 
+		FVector GlobalTargetLocation = GetTransform().TransformPosition(TargetLocation);//The transform that transforms from actor space to world space.
+		FVector Direction = (GlobalTargetLocation - Location).GetSafeNormal();
+		Location += speed * DeltaTiame* Direction;//движение по оси х 5 см в секунду 
 		SetActorLocation(Location);
 	}
 }
