@@ -17,6 +17,11 @@ class MULTUPLAYER_API AMovingPlatform : public AStaticMeshActor
 public: 
 	AMovingPlatform();
 
+	virtual void BeginPlay() override;
+	
 	virtual void Tick(float DeltaTiame)override;
+
+	UPROPERTY(EditAnywhere)
+	float speed = 5;
 	
 };

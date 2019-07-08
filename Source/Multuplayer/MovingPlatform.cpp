@@ -9,14 +9,24 @@ AMovingPlatform::AMovingPlatform()
 	SetMobility(EComponentMobility::Movable);
 }
 
+void AMovingPlatform::BeginPlay()
+{
+	Super::BeginPlay();
+	if (HasAuthority())
+	{
+		SetReplicates(true);
+		SetReplicateMovement(true);
+	}
+}
+
 void AMovingPlatform::Tick(float DeltaTiame)
 {
 	Super::Tick(DeltaTiame);
 	
-	if (HasAuthority()) 
+	if (HasAuthority()) //Returns whether this actor has network authority 
 	{
 		FVector Location = GetActorLocation();
-		Location += FVector(5 * DeltaTiame, 0, 0);//движение по оси х 5 см в секунду 
+		Location += FVector(speed * DeltaTiame, 0, 0);//движение по оси х 5 см в секунду 
 		SetActorLocation(Location);
 	}
 }
