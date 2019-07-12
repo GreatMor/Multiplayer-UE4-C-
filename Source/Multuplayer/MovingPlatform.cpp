@@ -29,10 +29,9 @@ void AMovingPlatform::Tick(float DeltaTiame)
 	
 	if (HasAuthority()) //Returns whether this actor has network authority 
 	{
-
 		FVector Location = GetActorLocation();
 
-		float JourneyLength = (GlobalTargetLocation - GlobalStartLocation).Size();//Длина поездки
+		float JourneyLength = (GlobalTargetLocation - GlobalStartLocation).Size();//Длина от A до B
 		float JourneyTravelled = (Location - GlobalStartLocation).Size();		
 
 		if (JourneyTravelled >= JourneyLength)
