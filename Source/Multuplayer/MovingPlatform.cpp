@@ -17,6 +17,10 @@ void AMovingPlatform::BeginPlay()
 		SetReplicates(true);
 		SetReplicateMovement(true);
 	}
+
+	GlobalStartLocation = GetActorLocation();
+	GlobalTargetLocation = GetTransform().TransformPosition(TargetLocation); //The transform that transforms from actor space to world space.
+
 }
 
 void AMovingPlatform::Tick(float DeltaTiame)
@@ -25,10 +29,22 @@ void AMovingPlatform::Tick(float DeltaTiame)
 	
 	if (HasAuthority()) //Returns whether this actor has network authority 
 	{
+
 		FVector Location = GetActorLocation();
-		FVector GlobalTargetLocation = GetTransform().TransformPosition(TargetLocation);//The transform that transforms from actor space to world space.
-		FVector Direction = (GlobalTargetLocation - Location).GetSafeNormal();
+
+		float JourneyLength = (GlobalTargetLocation - GlobalStartLocation).Size();//ƒлина поездки
+		float JourneyTravelled = (Location - GlobalStartLocation).Size();		
+
+		if (JourneyTravelled >= JourneyLength)
+		{
+			FVector Swap = GlobalStartLocation;
+			GlobalStartLocation = GlobalTargetLocation;
+			GlobalTargetLocation = Swap;
+		}
+
+		FVector Direction = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
 		Location += speed * DeltaTiame* Direction;//движение по оси х 5 см в секунду 
 		SetActorLocation(Location);
 	}
 }
+

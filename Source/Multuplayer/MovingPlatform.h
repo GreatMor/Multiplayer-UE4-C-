@@ -27,5 +27,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Moving Platform", Meta = (MakeEditWidget = true))
 	FVector TargetLocation;
 	
+private:
+
+	FVector GlobalTargetLocation;
+	FVector GlobalStartLocation;
 
 };
