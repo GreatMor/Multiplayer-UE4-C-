@@ -2,6 +2,9 @@
 
 
 #include "TriggerPlatform.h"
+#include "MovingPlatform.h"
+
+
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -34,10 +37,16 @@ void ATriggerPlatform::Tick(float DeltaTime)
 
 void ATriggerPlatform::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnOverlapBegin"));
+	for (AMovingPlatform* Platform : PlatformsToTrigger)
+	{
+		Platform->AddActiveTrigger();
+	}
 }
 
 void ATriggerPlatform::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnOverlapEnd"));
+	for (AMovingPlatform* Platform : PlatformsToTrigger)
+	{
+		Platform->RemoveActiveTrigger();
+	}
 }

@@ -26,24 +26,39 @@ void AMovingPlatform::BeginPlay()
 void AMovingPlatform::Tick(float DeltaTiame)
 {
 	Super::Tick(DeltaTiame);
-	
-	if (HasAuthority()) //Returns whether this actor has network authority 
+	if (ActiveTriggers > 0)
 	{
-		FVector Location = GetActorLocation();
-
-		float JourneyLength = (GlobalTargetLocation - GlobalStartLocation).Size();//ƒлина от A до B
-		float JourneyTravelled = (Location - GlobalStartLocation).Size();		
-
-		if (JourneyTravelled >= JourneyLength)
+		if (HasAuthority()) //Returns whether this actor has network authority 
 		{
-			FVector Swap = GlobalStartLocation;
-			GlobalStartLocation = GlobalTargetLocation;
-			GlobalTargetLocation = Swap;
-		}
+			FVector Location = GetActorLocation();
 
-		FVector Direction = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
-		Location += speed * DeltaTiame* Direction;//движение по оси х 5 см в секунду 
-		SetActorLocation(Location);
+			float JourneyLength = (GlobalTargetLocation - GlobalStartLocation).Size();//ƒлина от A до B
+			float JourneyTravelled = (Location - GlobalStartLocation).Size();
+
+			if (JourneyTravelled >= JourneyLength)
+			{
+				FVector Swap = GlobalStartLocation;
+				GlobalStartLocation = GlobalTargetLocation;
+				GlobalTargetLocation = Swap;
+			}
+
+			FVector Direction = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
+			Location += speed * DeltaTiame* Direction;//движение по оси х 5 см в секунду 
+			SetActorLocation(Location);
+		}
+	}
+}
+
+void AMovingPlatform::AddActiveTrigger()
+{
+	ActiveTriggers++;
+}
+
+void AMovingPlatform::RemoveActiveTrigger()
+{
+	if (ActiveTriggers > 0)
+	{
+		ActiveTriggers--;
 	}
 }
 
